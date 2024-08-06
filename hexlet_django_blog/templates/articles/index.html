@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% for msg in messages %}
+      {{ msg }}
+    {% endfor %}
     <h1>Список статей</h1>
+    <a href="{% url 'articles_create' %}">Create new article</a> <br />
     {% for article in articles %}
         <a href="{% url 'article_id' article.id %}"> {{ article.name }} </a>
         <div>{{ article.body|slice:":200" }}</div>
+        <ul>
+          <li><a href="{% url 'articles_update' id=article.id %}">update</a></li>
+          <li>
+            <form action="{% url 'articles_delete' article.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Удалить">
+            </form>
+          </li>
+        </ul>
     {% endfor %}
 {% endblock %}
